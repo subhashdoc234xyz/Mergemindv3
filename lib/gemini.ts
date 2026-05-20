@@ -6,19 +6,32 @@ export async function callGemini(prompt: string): Promise<string> {
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
   
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.2, maxOutputTokens: 8192 }
-    })
-  });
+  let res;
+  let retries = 3;
+  while (retries > 0) {
+    res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.2, maxOutputTokens: 8192 }
+      })
+    });
 
-  if (!res.ok) {
-    throw new Error(`Gemini API error ${res.status}: ${await res.text()}`);
+    if (res.ok || res.status !== 503) {
+      break;
+    }
+
+    retries--;
+    if (retries > 0) {
+      await new Promise(r => setTimeout(r, 2000)); // Wait 2 seconds before retrying
+    }
+  }
+
+  if (!res || !res.ok) {
+    throw new Error(`Gemini API error ${res?.status}: ${await res?.text()}`);
   }
 
   const data = await res.json();
