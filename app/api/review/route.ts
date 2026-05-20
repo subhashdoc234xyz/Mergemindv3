@@ -3,7 +3,7 @@ import { parseMRUrl } from '@/lib/parseMRUrl';
 import { getMRChanges, getRecentMRs, getMRNotes, postMRComment } from '@/lib/gitlabMcp';
 import { callGemini } from '@/lib/gemini';
 
-import { ReviewResponse } from '@/types/review';
+import { ReviewResponse, ReviewIssue } from '@/types/review';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
