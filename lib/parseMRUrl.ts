@@ -5,7 +5,7 @@ export function parseMRUrl(url: string): { projectPath: string; mrIid: string } 
   }
   
   return {
-    projectPath: encodeURIComponent(match[1]),
+    projectPath: match[1],
     mrIid: match[2],
   };
 }
