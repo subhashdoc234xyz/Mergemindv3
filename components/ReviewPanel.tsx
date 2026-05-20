@@ -1,6 +1,6 @@
 'use client';
 
-import { ReviewResponse } from '@/app/api/review/route';
+import { ReviewResponse } from '@/types/review';
 
 interface Props {
   review: ReviewResponse;
