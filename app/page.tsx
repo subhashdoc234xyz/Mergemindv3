@@ -7,7 +7,7 @@ import MRInput from '@/components/MRInput';
 import ReviewPanel from '@/components/ReviewPanel';
 import Header from '@/components/Header';
 import AuthPage from '@/components/AuthPage';
-import { ReviewResponse } from '@/app/api/review/route';
+import { ReviewResponse } from '@/types/review';
 
 export default function Page() {
   const [user, setUser] = useState<User | null>(null);

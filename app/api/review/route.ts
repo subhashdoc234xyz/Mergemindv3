@@ -3,20 +3,7 @@ import { parseMRUrl } from '@/lib/parseMRUrl';
 import { getMRChanges, getRecentMRs, getMRNotes, postMRComment } from '@/lib/gitlabMcp';
 import { callGemini } from '@/lib/gemini';
 
-interface ReviewIssue {
-  severity: 'CRITICAL' | 'WARNING' | 'SUGGESTION'
-  title: string
-  file: string
-  explanation: string
-  fix: string
-  comment: string
-}
-
-interface ReviewResult {
-  summary: string
-  healthScore: number
-  issues: ReviewIssue[]
-}
+import { ReviewResponse } from '@/types/review';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
@@ -106,7 +93,7 @@ Rules:
     // STEP 9 — Extract and parse JSON
     const jsonMatch = rawText.match(/\{[\s\S]*\}/)
     if (!jsonMatch) throw new Error('Gemini did not return valid JSON')
-    const review: ReviewResult = JSON.parse(jsonMatch[0])
+    const review: ReviewResponse = JSON.parse(jsonMatch[0])
 
     // STEP 10 — Post each issue comment to GitLab MR with 400ms delay between posts
     let commentsPosted = 0
