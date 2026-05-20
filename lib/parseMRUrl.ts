@@ -1,17 +1,11 @@
-/**
- * Parses a GitLab Merge Request URL to extract the project identifier and the MR IID.
- * Matches pattern: gitlab.com/(.+?)/-/merge_requests/(\d+)
- * Returns { projectId: string (URL encoded with encodeURIComponent), mrIid: string }
- * Throws Error('Invalid GitLab MR URL') if pattern doesn't match.
- */
-export function parseMRUrl(url: string): { projectId: string; mrIid: string } {
+export function parseMRUrl(url: string): { projectPath: string; mrIid: string } {
   const match = url.match(/gitlab\.com\/(.+?)\/-\/merge_requests\/(\d+)/);
   if (!match) {
-    throw new Error('Invalid GitLab MR URL');
+    throw new Error('Invalid GitLab MR URL. Expected: https://gitlab.com/username/repo/-/merge_requests/123');
   }
-
+  
   return {
-    projectId: encodeURIComponent(match[1]),
+    projectPath: match[1],
     mrIid: match[2],
   };
 }
